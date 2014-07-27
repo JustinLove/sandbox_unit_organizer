@@ -24,6 +24,8 @@
   var buildGrid = function(units, groups) {
     var grid = []
     var map = (new BuildHotkeyModel()).SpecIdToGridMap()
+    map["/pa/units/land/avatar_factory/avatar_factory.json"] = ['factory', 5]
+    map["/pa/units/commanders/avatar/avatar.json"] = ['orbital', 5]
 
     units.forEach(function(item) {
       var target = map[item.spec]
