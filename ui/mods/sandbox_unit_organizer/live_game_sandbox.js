@@ -72,7 +72,7 @@
   var fillInEmptySlots = function(grid) {
     for (var i = 0;i < grid.length;i++) {
       if (!grid[i]) {
-        grid[i] = {spec: '', icon: ''}
+        grid[i] = {spec: '', icon: 'coui://ui/main/shared/img/planets/empty.png'}
       }
     }
   }
