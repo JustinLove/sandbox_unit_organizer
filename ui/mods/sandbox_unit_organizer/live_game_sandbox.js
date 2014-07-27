@@ -10,14 +10,14 @@
     "/pa/units/commanders/tank_aeson/tank_aeson.json"
   ]
 
-  var leftGroups = _.invert([
+  var baseGroups = _.invert([
       'factory',
       'combat',
       'utility',
       'ammo'
   ]);
 
-  var rightGroups = _.invert([
+  var mobileGroups = _.invert([
       'vehicle',
       'bot',
       'air',
@@ -129,8 +129,8 @@
 
     var list = makeItems(model.unitSpecs())
 
-    var left = gridify(list, rightGroups)
-    var right = gridify(list, leftGroups).concat(makeItems(_.invert(basicCommanders)))
+    var left = gridify(list, mobileGroups)
+    var right = gridify(list, baseGroups).concat(makeItems(_.invert(basicCommanders)))
     var grid = compose(left, right)
     fillInEmptySlots(grid)
 
