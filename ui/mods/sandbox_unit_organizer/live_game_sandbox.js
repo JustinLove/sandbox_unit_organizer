@@ -1,6 +1,15 @@
 (function() {
   loadScript('coui://ui/main/shared/js/build.js')
 
+  var basicCommanders = [
+    "/pa/units/commanders/imperial_invictus/imperial_invictus.json", 
+    "/pa/units/commanders/quad_osiris/quad_osiris.json", 
+    "/pa/units/commanders/raptor_centurion/raptor_centurion.json", 
+    "/pa/units/commanders/raptor_nemicus/raptor_nemicus.json", 
+    "/pa/units/commanders/raptor_rallus/raptor_rallus.json", 
+    "/pa/units/commanders/tank_aeson/tank_aeson.json"
+  ]
+
   var leftGroups = _.invert([
       'factory',
       'combat',
@@ -20,6 +29,15 @@
     var filenameMatch = /([^\/]*)\.json[^\/]*$/;
     return (filenameMatch.exec(spec) || [])[1];
   };
+
+  var makeItems = function(specs) {
+    return _.map(specs, function(unit, spec) {
+      return({
+        spec: spec,
+        icon: 'img/build_bar/units/' + getBaseFileName(spec) + '.png'
+      });
+    });
+  }
 
   var buildGrid = function(units, groups) {
     var grid = []
@@ -80,19 +98,39 @@
     return grid
   }
 
+  var difference = function(list, grid) {
+    var index = {}
+    var diff = []
+    grid.forEach(function(item) {index[item.spec] = item})
+    console.log(list, grid, index)
+    list.forEach(function(item) {
+      if (!index[item.spec]) {
+        diff.push(item)
+      }
+    })
+    return diff
+  }
+
+  var filter = function(list) {
+    return list.filter(function(item) {
+      return !item.spec.match(/base/)
+    })
+  }
+
+  var print = function(list) {
+    list.forEach(function(item) {
+      console.log(item.spec)
+    })
+  }
+
   model.sandbox_units = ko.computed(function() {
     if (!model.sandbox_expanded()) return [];
     if (!window['BuildHotkeyModel']) return [];
 
-    var list = _.map(model.unitSpecs(), function(unit, spec) {
-      return({
-        spec: spec,
-        icon: 'img/build_bar/units/' + getBaseFileName(spec) + '.png'
-      });
-    });
+    var list = makeItems(model.unitSpecs())
 
     var left = gridify(list, rightGroups)
-    var right = gridify(list, leftGroups)
+    var right = gridify(list, leftGroups).concat(makeItems(_.invert(basicCommanders)))
     var grid = compose(left, right)
     fillInEmptySlots(grid)
 
