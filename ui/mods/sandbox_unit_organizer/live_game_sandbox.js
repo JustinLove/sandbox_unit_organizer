@@ -1,16 +1,19 @@
 (function() {
   loadScript('coui://ui/main/shared/js/build.js')
 
-  var tabOrder = _.invert([
+  var leftGroups = _.invert([
       'factory',
       'combat',
       'utility',
+      'ammo'
+  ]);
+
+  var rightGroups = _.invert([
       'vehicle',
       'bot',
       'air',
       'sea',
-      'orbital',
-      'ammo'
+      'orbital'
   ]);
 
   var getBaseFileName = function(spec) {
@@ -18,14 +21,14 @@
     return (filenameMatch.exec(spec) || [])[1];
   };
 
-  var fullBuildGrid = function(units) {
+  var buildGrid = function(units, groups) {
     var grid = []
     var map = (new BuildHotkeyModel()).SpecIdToGridMap()
 
     units.forEach(function(item) {
       var target = map[item.spec]
-      if (target) {
-        grid[tabOrder[target[0]] * 15 + target[1]] = item
+      if (target && groups[target[0]]) {
+        grid[groups[target[0]] * 15 + target[1]] = item
       }
     })
 
@@ -54,11 +57,24 @@
     }
   }
 
-  var gridify = function(units) {
-    var grid = fullBuildGrid(units)
+  var gridify = function(units, groups) {
+    var grid = buildGrid(units, groups)
     removeEmptyRows(grid)
-    fillInEmptySlots(grid)
 
+    return grid
+  }
+
+  var compose = function(left, right) {
+    var elements = Math.max(left.length, right.length)
+    var rows = Math.ceil(elements / 5)
+    var grid = []
+    var gx
+    for (var i = 0;i < rows;i++) {
+      for (gx = 0;gx < 5;gx++) {
+        grid[i*10 + gx] = left[i*5 + gx]
+        grid[i*10 + 5 + gx] = right[i*5 + gx]
+      }
+    }
     return grid
   }
 
@@ -73,6 +89,11 @@
       });
     });
 
-    return gridify(list)
+    var left = gridify(list, rightGroups)
+    var right = gridify(list, leftGroups)
+    var grid = compose(left, right)
+    fillInEmptySlots(grid)
+
+    return grid
   });
 })()
