@@ -1,0 +1,12 @@
+.sandbox_unit_organizer {
+  color: white;
+  font-size: 10vh;
+  position: absolute;
+  top: 45vh;
+  left: 30vw;
+}
+
+div.div_sandbox_main {
+  /*width: 207px;*/ /* five wide*/
+  width: 414px; /* ten wide */
+}
