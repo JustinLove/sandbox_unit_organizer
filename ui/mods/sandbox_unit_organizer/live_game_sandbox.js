@@ -1,13 +1,15 @@
 (function() {
   loadScript('coui://ui/main/shared/js/build.js')
 
-  var basicCommanders = [
+  var miscUnits = [
     "/pa/units/commanders/imperial_invictus/imperial_invictus.json", 
     "/pa/units/commanders/quad_osiris/quad_osiris.json", 
     "/pa/units/commanders/raptor_centurion/raptor_centurion.json", 
     "/pa/units/commanders/raptor_nemicus/raptor_nemicus.json", 
     "/pa/units/commanders/raptor_rallus/raptor_rallus.json", 
-    "/pa/units/commanders/tank_aeson/tank_aeson.json"
+    "/pa/units/commanders/tank_aeson/tank_aeson.json",
+    "/pa/units/commanders/avatar/avatar.json",
+    "/pa/units/land/avatar_factory/avatar_factory.json"
   ]
 
   var baseGroups = _.invert([
@@ -42,8 +44,6 @@
   var buildGrid = function(units, groups) {
     var grid = []
     var map = (new BuildHotkeyModel()).SpecIdToGridMap()
-    map["/pa/units/land/avatar_factory/avatar_factory.json"] = ['factory', 5]
-    map["/pa/units/commanders/avatar/avatar.json"] = ['orbital', 5]
 
     units.forEach(function(item) {
       var target = map[item.spec]
@@ -130,7 +130,7 @@
     var list = makeItems(model.unitSpecs())
 
     var left = gridify(list, mobileGroups)
-    var right = gridify(list, baseGroups).concat(makeItems(_.invert(basicCommanders)))
+    var right = gridify(list, baseGroups).concat(makeItems(_.invert(miscUnits)))
     var grid = compose(left, right)
     fillInEmptySlots(grid)
 
