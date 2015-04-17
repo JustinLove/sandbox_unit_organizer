@@ -1,6 +1,11 @@
+## 1.1.2
+
+- Update build number (Thanks ViolentMind)
+- Remove debugging log statement
+
 ## 1.1.1
 
-- activate ui based on sandbox game option
+- Activate ui based on sandbox game option
 
 ## 1.1.0
 

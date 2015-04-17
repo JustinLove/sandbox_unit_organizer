@@ -1,5 +1,4 @@
 (function() {
-  console.log('run')
   if (!model['serverSandboxState']) {
     model.serverSandboxState = ko.observable(false)
     model.serverSandboxState.subscribe(model.cheatAllowCreateUnit)
