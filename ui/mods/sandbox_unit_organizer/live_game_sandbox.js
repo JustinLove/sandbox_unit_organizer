@@ -174,15 +174,15 @@
     return grid
   });
 
-  var $sandbox = $('.div_sandbox_main')
-  $sandbox.attr('data-bind', $sandbox.attr('data-bind') + ', style: {width: sandboxWidth}')
+  var $preKOMain = $('.div_sandbox_main')
+  $preKOMain.attr('data-bind', $preKOMain.attr('data-bind') + ', style: {width: sandboxWidth}')
 
   var resized = function(height) {
     if (height < 800) {
-      $sandbox.addClass('small_sandbox')
+      $('.div_sandbox_dock').addClass('small_sandbox')
       iconSize(24)
     } else {
-      $sandbox.removeClass('small_sandbox')
+      $('.div_sandbox_dock').removeClass('small_sandbox')
       iconSize(36)
     }
   }

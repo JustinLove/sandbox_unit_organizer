@@ -1,3 +1,7 @@
+## 1.3.1
+
+- Correctly apply size adjustments for usual case of manually opening box.
+
 ## 1.3.0
 
 - Smaller icons for small displays
