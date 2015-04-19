@@ -25,6 +25,15 @@
       'orbital'
   ]);
 
+  var groupColumns = ko.observable(5)
+  var groupRows = ko.observable(3)
+  var groupSize = ko.computed(function() {
+    return groupColumns() * groupRows()
+  })
+  model.sandboxWidth = ko.computed(function() {
+    return (groupColumns() * 2 * 42).toString() + 'px'
+  })
+
   var getBaseFileName = function(spec) {
     var filenameMatch = /([^\/]*)\.json[^\/]*$/;
     return (filenameMatch.exec(spec) || [])[1];
@@ -46,7 +55,7 @@
     units.forEach(function(item) {
       var target = map[item.spec]
       if (target && groups[target[0]]) {
-        grid[groups[target[0]] * 15 + target[1]] = item
+        grid[groups[target[0]] * groupSize() + target[1]] = item
       }
     })
 
@@ -54,15 +63,16 @@
   }
 
   var removeEmptyRows = function(grid) {
-    for (i = grid.length + 5 - grid.length % 5;i >= 0;i -= 5) {
+    var c = groupColumns()
+    for (i = grid.length + c - grid.length % c;i >= 0;i -= c) {
       empty = true
-      for (var j = 0;j < 5;j++) {
+      for (var j = 0;j < c;j++) {
         if (grid[i+j]) {
           empty = false
         }
       }
       if (empty) {
-        grid.splice(i, 5)
+        grid.splice(i, c)
       }
     }
   }
@@ -83,14 +93,15 @@
   }
 
   var compose = function(left, right) {
+    var c = groupColumns()
     var elements = Math.max(left.length, right.length)
-    var rows = Math.ceil(elements / 5)
+    var rows = Math.ceil(elements / c)
     var grid = []
     var gx
     for (var i = 0;i < rows;i++) {
-      for (gx = 0;gx < 5;gx++) {
-        grid[i*10 + gx] = left[i*5 + gx]
-        grid[i*10 + 5 + gx] = right[i*5 + gx]
+      for (gx = 0;gx < c;gx++) {
+        grid[i*c*2 + gx] = left[i*c + gx]
+        grid[i*c*2 + c + gx] = right[i*c + gx]
       }
     }
     return grid
@@ -134,4 +145,9 @@
 
     return grid
   });
+
+  var $sandbox = $('.div_sandbox_main')
+  $sandbox.attr('data-bind', $sandbox.attr('data-bind') + ', style: {width: sandboxWidth}')
+
+  //model.sandbox_expanded(true)
 })()
