@@ -1,6 +1,4 @@
 (function() {
-  loadScript('coui://ui/main/shared/js/build.js')
-
   var miscUnits = [
     "/pa/units/commanders/imperial_invictus/imperial_invictus.json", 
     "/pa/units/commanders/quad_osiris/quad_osiris.json", 

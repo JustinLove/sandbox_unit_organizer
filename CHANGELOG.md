@@ -1,3 +1,7 @@
+## 1.1.3
+
+- Remove double load of build positions
+
 ## 1.1.2
 
 - Update build number (Thanks ViolentMind)
