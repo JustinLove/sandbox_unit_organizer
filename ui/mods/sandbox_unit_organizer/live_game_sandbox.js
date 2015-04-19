@@ -34,6 +34,31 @@
     return (groupColumns() * 2 * 42).toString() + 'px'
   })
 
+  var calibrateGrid = function() {
+    var map = (new BuildHotkeyModel()).SpecIdToGridMap()
+    var positions = Object.keys(map).map(function(spec) {return map[spec][1]})
+    var max = Math.max.apply(Math, positions)
+    if (max < 15) {
+      groupColumns(5)
+      groupRows(3)
+    } else if (max < 18) {
+      groupColumns(6)
+      groupRows(3)
+    } else if (max < 20) {
+      groupColumns(5)
+      groupRows(4)
+    } else if (max < 21) {
+      groupColumns(7)
+      groupRows(3)
+    } else if (max < 24) {
+      groupColumns(6)
+      groupRows(4)
+    } else if (max < 25) {
+      groupColumns(5)
+      groupRows(5)
+    }
+  }
+
   var getBaseFileName = function(spec) {
     var filenameMatch = /([^\/]*)\.json[^\/]*$/;
     return (filenameMatch.exec(spec) || [])[1];
@@ -135,6 +160,8 @@
   model.sandbox_units = ko.computed(function() {
     if (!model.sandbox_expanded()) return [];
     if (!window['BuildHotkeyModel']) return [];
+
+    calibrateGrid()
 
     var list = makeItems(model.unitSpecs())
 

@@ -1,5 +1,6 @@
 ## 1.2.0
 
+- Attempt to guess non-standard grid sizes (e.g. ModX)
 - Remove double load of build positions
 
 ## 1.1.2
