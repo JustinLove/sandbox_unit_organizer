@@ -1,3 +1,7 @@
+## 1.3.0
+
+- Smaller icons for small displays
+
 ## 1.2.0
 
 - Attempt to guess non-standard grid sizes (e.g. ModX)

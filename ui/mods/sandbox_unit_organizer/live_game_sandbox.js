@@ -30,8 +30,9 @@
   var groupSize = ko.computed(function() {
     return groupColumns() * groupRows()
   })
+  var iconSize = ko.observable(36)
   model.sandboxWidth = ko.computed(function() {
-    return (groupColumns() * 2 * 42).toString() + 'px'
+    return (groupColumns() * 2 * (iconSize() * 1.16)).toString() + 'px'
   })
 
   var calibrateGrid = function() {
@@ -175,6 +176,21 @@
 
   var $sandbox = $('.div_sandbox_main')
   $sandbox.attr('data-bind', $sandbox.attr('data-bind') + ', style: {width: sandboxWidth}')
+
+  var resized = function(height) {
+    if (height < 800) {
+      $sandbox.addClass('small_sandbox')
+      iconSize(24)
+    } else {
+      $sandbox.removeClass('small_sandbox')
+      iconSize(36)
+    }
+  }
+
+  api.Panel.query(api.Panel.parentId, 'panel.invoke', ['screenHeight'])
+    .then(resized)
+
+  handlers.screen_height = resized
 
   //model.sandbox_expanded(true)
 })()
