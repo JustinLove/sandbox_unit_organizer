@@ -1,9 +1,9 @@
 {
   "author": "wondible",
-  "build": "80462",
-  "category": ["in-game", "ui", "sandbox"],
+  "build": "86422",
+  "category": ["ui", "sandbox"],
   "context": "client",
-  "date": "2015/04/19",
+  "date": "2015/08/19",
   "description": "Puts the sandbox unit toolbox in order, and removes most not-normally-buildable units.  Incorporates the 'Sandbox Unit Toolbox' mod.",
   "display_name": "Sandbox Unit Organizer",
   "forum": "https://forums.uberent.com/threads/rel-sandbox-unit-organizer.62310/",
@@ -15,12 +15,11 @@
       "coui://ui/mods/sandbox_unit_organizer/live_game.js"
     ],
     "live_game_sandbox": [
-      "coui://ui/main/shared/js/build.js",
       "coui://ui/mods/sandbox_unit_organizer/live_game_sandbox.css",
       "coui://ui/mods/sandbox_unit_organizer/live_game_sandbox.js"
     ]
   },
   "signature": "not yet implemented",
-  "version": "1.3.1"
+  "version": "1.3.2"
 }
 

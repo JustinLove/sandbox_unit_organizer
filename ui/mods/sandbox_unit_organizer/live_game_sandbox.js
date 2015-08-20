@@ -1,4 +1,5 @@
 (function() {
+  console.log('run')
   var miscUnits = [
     "/pa/units/commanders/imperial_invictus/imperial_invictus.json", 
     "/pa/units/commanders/quad_osiris/quad_osiris.json", 
@@ -14,6 +15,7 @@
       'factory',
       'combat',
       'utility',
+      'orbital_structure',
       'ammo'
   ]);
 
@@ -25,7 +27,7 @@
       'orbital'
   ]);
 
-  var groupColumns = ko.observable(5)
+  var groupColumns = ko.observable(6)
   var groupRows = ko.observable(3)
   var groupSize = ko.computed(function() {
     return groupColumns() * groupRows()
@@ -36,7 +38,7 @@
   })
 
   var calibrateGrid = function() {
-    var map = (new BuildHotkeyModel()).SpecIdToGridMap()
+    var map = (new Build.HotkeyModel()).SpecIdToGridMap()
     var positions = Object.keys(map).map(function(spec) {return map[spec][1]})
     var max = Math.max.apply(Math, positions)
     if (max < 15) {
@@ -60,23 +62,18 @@
     }
   }
 
-  var getBaseFileName = function(spec) {
-    var filenameMatch = /([^\/]*)\.json[^\/]*$/;
-    return (filenameMatch.exec(spec) || [])[1];
-  };
-
   var makeItems = function(specs) {
     return _.map(specs, function(unit, spec) {
       return({
         spec: spec,
-        icon: 'img/build_bar/units/' + getBaseFileName(spec) + '.png'
+        icon: Build.iconForSpecId(spec)
       });
     });
   }
 
   var buildGrid = function(units, groups) {
     var grid = []
-    var map = (new BuildHotkeyModel()).SpecIdToGridMap()
+    var map = (new Build.HotkeyModel()).SpecIdToGridMap()
 
     units.forEach(function(item) {
       var target = map[item.spec]
@@ -160,7 +157,7 @@
 
   model.sandbox_units = ko.computed(function() {
     if (!model.sandbox_expanded()) return [];
-    if (!window['BuildHotkeyModel']) return [];
+    if (!window['Build']) return [];
 
     calibrateGrid()
 

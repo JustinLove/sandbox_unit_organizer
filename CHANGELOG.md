@@ -1,3 +1,10 @@
+## 1.3.2
+
+- Minimal fix for 86422 (titans)
+  - Build object changed
+  - Use method for icon path
+  - Add `orbital_structure` tab
+
 ## 1.3.1
 
 - Correctly apply size adjustments for usual case of manually opening box.
