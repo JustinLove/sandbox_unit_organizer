@@ -1,4 +1,6 @@
 (function() {
+  "use strict";
+
   var miscUnits = [
     "/pa/units/commanders/imperial_invictus/imperial_invictus.json", 
     "/pa/units/commanders/quad_osiris/quad_osiris.json", 
@@ -93,13 +95,21 @@
     var c = grid.columns
     var cells = grid.cells
     for (i = cells.length + c - cells.length % c;i >= 0;i -= c) {
-      empty = true
+      var items = 0
       for (var j = 0;j < c;j++) {
         if (cells[i+j]) {
-          empty = false
+          items = items + 1
         }
       }
-      if (empty) {
+      if (items < 1) {
+        cells.splice(i, c)
+      }
+      if (items == 1) {
+        for (var j = 0;j < c;j++) {
+          if (cells[i+j]) {
+            miscUnits.unshift(cells[i+j].spec)
+          }
+        }
         cells.splice(i, c)
       }
     }
@@ -109,7 +119,7 @@
     var cells = grid.cells
     for (var j = grid.columns;j >= 0;j--) {
       var c = grid.columns
-      empty = true
+      var empty = true
       for (i = cells.length + j - cells.length % c;i >= 0;i -= c) {
         if (cells[i]) {
           empty = false
@@ -195,8 +205,8 @@
 
     var left = gridify(list, mobileGroups)
     var right = gridify(list, baseGroups)
-    right.cells = right.cells.concat(makeItems(_.invert(miscUnits)))
     var grid = compose(left, right)
+    grid.cells = grid.cells.concat(makeItems(_.invert(miscUnits)))
     fillInEmptySlots(grid)
 
     sandboxColumns(grid.columns)

@@ -1,6 +1,7 @@
-## 1.4.2
+## 1.4.0
 
 - Remove empty columns
+- Collect units from single-item rows at the bottom
 
 ## 1.3.2
 
