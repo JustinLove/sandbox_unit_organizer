@@ -1,3 +1,7 @@
+## 1.4.2
+
+- Remove empty columns
+
 ## 1.3.2
 
 - Minimal fix for 86422 (titans)

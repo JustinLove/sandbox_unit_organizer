@@ -1,5 +1,4 @@
 (function() {
-  console.log('run')
   var miscUnits = [
     "/pa/units/commanders/imperial_invictus/imperial_invictus.json", 
     "/pa/units/commanders/quad_osiris/quad_osiris.json", 
@@ -32,9 +31,10 @@
   var groupSize = ko.computed(function() {
     return groupColumns() * groupRows()
   })
+  var sandboxColumns = ko.observable(groupColumns() * 2)
   var iconSize = ko.observable(36)
   model.sandboxWidth = ko.computed(function() {
-    return (groupColumns() * 2 * (iconSize() * 1.16)).toString() + 'px'
+    return (sandboxColumns() * (iconSize() * 1.16)).toString() + 'px'
   })
 
   var calibrateGrid = function() {
@@ -60,6 +60,7 @@
       groupColumns(5)
       groupRows(5)
     }
+    sandboxColumns(groupColumns() * 2)
   }
 
   var makeItems = function(specs) {
@@ -82,28 +83,52 @@
       }
     })
 
-    return grid
+    return {
+      columns: groupColumns(),
+      cells: grid,
+    }
   }
 
   var removeEmptyRows = function(grid) {
-    var c = groupColumns()
-    for (i = grid.length + c - grid.length % c;i >= 0;i -= c) {
+    var c = grid.columns
+    var cells = grid.cells
+    for (i = cells.length + c - cells.length % c;i >= 0;i -= c) {
       empty = true
       for (var j = 0;j < c;j++) {
-        if (grid[i+j]) {
+        if (cells[i+j]) {
           empty = false
         }
       }
       if (empty) {
-        grid.splice(i, c)
+        cells.splice(i, c)
+      }
+    }
+  }
+
+  var removeEmptyColumns = function(grid) {
+    var cells = grid.cells
+    for (var j = grid.columns;j >= 0;j--) {
+      var c = grid.columns
+      empty = true
+      for (i = cells.length + j - cells.length % c;i >= 0;i -= c) {
+        if (cells[i]) {
+          empty = false
+        }
+      }
+      if (empty) {
+        for (i = cells.length + j - cells.length % c;i >= 0;i -= c) {
+          cells.splice(i, 1)
+        }
+        grid.columns = grid.columns - 1
       }
     }
   }
 
   var fillInEmptySlots = function(grid) {
-    for (var i = 0;i < grid.length;i++) {
-      if (!grid[i]) {
-        grid[i] = {spec: '', icon: 'coui://ui/main/shared/img/planets/empty.png'}
+    var cells = grid.cells
+    for (var i = 0;i < cells.length;i++) {
+      if (!cells[i]) {
+        cells[i] = {spec: '', icon: 'coui://ui/main/shared/img/planets/empty.png'}
       }
     }
   }
@@ -111,30 +136,35 @@
   var gridify = function(units, groups) {
     var grid = buildGrid(units, groups)
     removeEmptyRows(grid)
+    removeEmptyColumns(grid)
 
     return grid
   }
 
   var compose = function(left, right) {
-    var c = groupColumns()
-    var elements = Math.max(left.length, right.length)
-    var rows = Math.ceil(elements / c)
-    var grid = []
+    var c = left.columns + right.columns
+    var rows = Math.ceil(Math.max(left.cells.length / left.columns,
+                                  right.cells.length / right.columns))
+    var cells = []
     var gx
     for (var i = 0;i < rows;i++) {
-      for (gx = 0;gx < c;gx++) {
-        grid[i*c*2 + gx] = left[i*c + gx]
-        grid[i*c*2 + c + gx] = right[i*c + gx]
+      for (gx = 0;gx < left.columns;gx++) {
+        cells[i*c + gx] = left.cells[i*left.columns + gx]
+      }
+      for (gx = 0;gx < right.columns;gx++) {
+        cells[i*c + left.columns + gx] = right.cells[i*right.columns + gx]
       }
     }
-    return grid
+    return {
+      columns: c,
+      cells: cells,
+    }
   }
 
   var difference = function(list, grid) {
     var index = {}
     var diff = []
     grid.forEach(function(item) {index[item.spec] = item})
-    console.log(list, grid, index)
     list.forEach(function(item) {
       if (!index[item.spec]) {
         diff.push(item)
@@ -164,11 +194,13 @@
     var list = makeItems(model.unitSpecs())
 
     var left = gridify(list, mobileGroups)
-    var right = gridify(list, baseGroups).concat(makeItems(_.invert(miscUnits)))
+    var right = gridify(list, baseGroups)
+    right.cells = right.cells.concat(makeItems(_.invert(miscUnits)))
     var grid = compose(left, right)
     fillInEmptySlots(grid)
 
-    return grid
+    sandboxColumns(grid.columns)
+    return grid.cells
   });
 
   var $preKOMain = $('.div_sandbox_main')

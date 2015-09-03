@@ -1,9 +1,9 @@
 {
   "author": "wondible",
-  "build": "86422",
+  "build": "86765",
   "category": ["ui", "sandbox"],
   "context": "client",
-  "date": "2015/08/19",
+  "date": "2015/09/03",
   "description": "Puts the sandbox unit toolbox in order, and removes most not-normally-buildable units.  Incorporates the 'Sandbox Unit Toolbox' mod.",
   "display_name": "Sandbox Unit Organizer",
   "forum": "https://forums.uberent.com/threads/rel-sandbox-unit-organizer.62310/",
@@ -20,6 +20,6 @@
     ]
   },
   "signature": "not yet implemented",
-  "version": "1.3.2"
+  "version": "1.4.0"
 }
 
