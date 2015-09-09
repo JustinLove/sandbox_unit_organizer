@@ -1,3 +1,7 @@
+## 1.4.1
+
+- Tweak box size to work with scaled UI
+
 ## 1.4.0
 
 - Remove empty columns

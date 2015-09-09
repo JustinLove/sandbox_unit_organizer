@@ -36,7 +36,7 @@
   var sandboxColumns = ko.observable(groupColumns() * 2)
   var iconSize = ko.observable(36)
   model.sandboxWidth = ko.computed(function() {
-    return (sandboxColumns() * (iconSize() * 1.16)).toString() + 'px'
+    return (sandboxColumns() * (iconSize() * 1.12) + 22).toString() + 'px'
   })
 
   var calibrateGrid = function() {
