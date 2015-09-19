@@ -12,6 +12,10 @@
     "/pa/units/land/avatar_factory/avatar_factory.json"
   ]
 
+  if (api.content.active() == 'PAExpansion1') {
+    miscUnits.unshift("/pa/units/sea/drone_carrier/drone/drone.json")
+  }
+
   var baseGroups = _.invert([
       'factory',
       'combat',

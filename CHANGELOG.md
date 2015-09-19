@@ -1,3 +1,7 @@
+## 1.5.0
+
+- Add Squall (drone) to misc units
+
 ## 1.4.1
 
 - Tweak box size to work with scaled UI
