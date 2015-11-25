@@ -1,3 +1,7 @@
+## 1.6.0
+
+- Add unknown tabs
+
 ## 1.5.0
 
 - Add Squall (drone) to misc units

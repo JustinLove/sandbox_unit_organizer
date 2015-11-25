@@ -16,21 +16,50 @@
     miscUnits.unshift("/pa/units/sea/drone_carrier/drone/drone.json")
   }
 
-  var baseGroups = _.invert([
-      'factory',
-      'combat',
-      'utility',
-      'orbital_structure',
-      'ammo'
-  ]);
+  var baseGroups = [
+    'factory',
+    'combat',
+    'utility',
+    'orbital_structure',
+    'ammo',
+  ];
 
-  var mobileGroups = _.invert([
-      'vehicle',
-      'bot',
-      'air',
-      'sea',
-      'orbital'
-  ]);
+  var mobileGroups = [
+    'vehicle',
+    'bot',
+    'air',
+    'sea',
+    'orbital',
+  ];
+
+  var addUnknownTabs = function() {
+    var map = (new Build.HotkeyModel()).SpecIdToGridMap()
+    var tabs = _.uniq(Object.keys(map).map(function(spec) {return map[spec][0]}))
+    var base = baseGroups.slice(0)
+    var mobile = mobileGroups.slice(0)
+    tabs = _.difference(tabs, mobile, base)
+    tabs.forEach(function(tab) {
+      for (var i in base) {
+        if (tab.match(base[i])) {
+          baseGroups.push(tab)
+          return
+        }
+      }
+
+      for (var i in mobile) {
+        if (tab.match(mobile[i])) {
+          mobileGroups.push(tab)
+          return
+        }
+      }
+
+      if (baseGroups.length <= mobileGroups.length) {
+        baseGroups.push(tab)
+      } else {
+        mobileGroups.push(tab)
+      }
+    })
+  }
 
   var groupColumns = ko.observable(6)
   var groupRows = ko.observable(3)
@@ -79,6 +108,7 @@
   }
 
   var buildGrid = function(units, groups) {
+    groups = _.invert(groups)
     var grid = []
     var map = (new Build.HotkeyModel()).SpecIdToGridMap()
 
@@ -204,6 +234,7 @@
     if (!window['Build']) return [];
 
     calibrateGrid()
+    addUnknownTabs()
 
     var list = makeItems(model.unitSpecs())
 
