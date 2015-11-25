@@ -1,7 +1,7 @@
 (function() {
   "use strict";
 
-  var miscUnits = [
+  model.miscUnits = ko.observableArray([
     "/pa/units/commanders/imperial_invictus/imperial_invictus.json", 
     "/pa/units/commanders/quad_osiris/quad_osiris.json", 
     "/pa/units/commanders/raptor_centurion/raptor_centurion.json", 
@@ -10,53 +10,53 @@
     "/pa/units/commanders/tank_aeson/tank_aeson.json",
     "/pa/units/commanders/avatar/avatar.json",
     "/pa/units/land/avatar_factory/avatar_factory.json"
-  ]
+  ])
 
   if (api.content.active() == 'PAExpansion1') {
-    miscUnits.unshift("/pa/units/sea/drone_carrier/drone/drone.json")
+    model.miscUnits.unshift("/pa/units/sea/drone_carrier/drone/drone.json")
   }
 
-  var baseGroups = [
+  model.baseGroups = ko.observableArray([
     'factory',
     'combat',
     'utility',
     'orbital_structure',
     'ammo',
-  ];
+  ])
 
-  var mobileGroups = [
+  model.mobileGroups = ko.observableArray([
     'vehicle',
     'bot',
     'air',
     'sea',
     'orbital',
-  ];
+  ])
 
   var addUnknownTabs = function() {
     var map = (new Build.HotkeyModel()).SpecIdToGridMap()
     var tabs = _.uniq(Object.keys(map).map(function(spec) {return map[spec][0]}))
-    var base = baseGroups.slice(0)
-    var mobile = mobileGroups.slice(0)
+    var base = model.baseGroups.slice(0)
+    var mobile = model.mobileGroups.slice(0)
     tabs = _.difference(tabs, mobile, base)
     tabs.forEach(function(tab) {
       for (var i in base) {
         if (tab.match(base[i])) {
-          baseGroups.push(tab)
+          model.baseGroups.push(tab)
           return
         }
       }
 
       for (var i in mobile) {
         if (tab.match(mobile[i])) {
-          mobileGroups.push(tab)
+          model.mobileGroups.push(tab)
           return
         }
       }
 
-      if (baseGroups.length <= mobileGroups.length) {
-        baseGroups.push(tab)
+      if (model.baseGroups().length <= model.mobileGroups().length) {
+        model.baseGroups.push(tab)
       } else {
-        mobileGroups.push(tab)
+        model.mobileGroups.push(tab)
       }
     })
   }
@@ -141,7 +141,7 @@
       if (items == 1) {
         for (var j = 0;j < c;j++) {
           if (cells[i+j]) {
-            miscUnits.unshift(cells[i+j].spec)
+            model.miscUnits.unshift(cells[i+j].spec)
           }
         }
         cells.splice(i, c)
@@ -238,10 +238,10 @@
 
     var list = makeItems(model.unitSpecs())
 
-    var left = gridify(list, mobileGroups)
-    var right = gridify(list, baseGroups)
+    var left = gridify(list, model.mobileGroups())
+    var right = gridify(list, model.baseGroups())
     var grid = compose(left, right)
-    grid.cells = grid.cells.concat(makeItems(_.invert(miscUnits)))
+    grid.cells = grid.cells.concat(makeItems(_.invert(model.miscUnits())))
     fillInEmptySlots(grid)
 
     sandboxColumns(grid.columns)

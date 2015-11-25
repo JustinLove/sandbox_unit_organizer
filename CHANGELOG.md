@@ -1,6 +1,7 @@
 ## 1.6.0
 
 - Add unknown tabs
+- Expose baseGroups, mobileGroups, and miscUnits on model for mod extensions
 
 ## 1.5.0
 
