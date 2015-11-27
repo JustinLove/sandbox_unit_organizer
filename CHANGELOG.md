@@ -1,3 +1,7 @@
+## 1.7.0
+
+- model.sandboxGrid() returns {columns: n, cells: []} in order to introspect on the current layout
+
 ## 1.6.0
 
 - Add unknown tabs

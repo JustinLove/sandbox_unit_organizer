@@ -22,3 +22,5 @@ So if you mod introduces a new unit type with a factory only buildable by a spec
     if (model.miscUnits) {
       model.miscUnits.push('/pa/units/commanders/laser_shark_commander/laser_shark_commander.json')
     }
+
+Additionally, model.sandboxGrid() returns {columns: n, cells: []} for introspecting on the sandbox layout.

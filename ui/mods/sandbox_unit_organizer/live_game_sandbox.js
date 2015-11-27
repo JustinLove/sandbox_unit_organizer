@@ -229,9 +229,11 @@
     })
   }
 
-  model.sandbox_units = ko.computed(function() {
-    if (!model.sandbox_expanded()) return [];
-    if (!window['Build']) return [];
+  // pure is not run if nobody is watching
+  model.sandboxGrid = ko.pureComputed(function() {
+    if (!window['Build']) {
+      return {columns: sandboxColumns(), cells: []}
+    }
 
     calibrateGrid()
     addUnknownTabs()
@@ -245,7 +247,14 @@
     fillInEmptySlots(grid)
 
     sandboxColumns(grid.columns)
-    return grid.cells
+    return grid
+  });
+
+  model.sandbox_units = ko.computed(function() {
+    if (!model.sandbox_expanded()) return [];
+    if (!window['Build']) return [];
+
+    return model.sandboxGrid().cells
   });
 
   var $preKOMain = $('.div_sandbox_main')
