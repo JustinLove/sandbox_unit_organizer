@@ -69,7 +69,7 @@
   var sandboxColumns = ko.observable(groupColumns() * 2)
   var iconSize = ko.observable(36)
   model.sandboxWidth = ko.computed(function() {
-    return (sandboxColumns() * (iconSize() * 1.12) + 22).toString() + 'px'
+    return (sandboxColumns() * (iconSize() * 1.12)).toString() + 'px'
   })
 
   var calibrateGrid = function() {
@@ -102,7 +102,9 @@
     return _.map(specs, function(unit, spec) {
       return({
         spec: spec,
-        icon: Build.iconForSpecId(spec)
+        icon: Build.iconForSpecId(spec),
+        name: loc(unit.name),
+        tooltip: name + ' ' + loc(unit.description),
       });
     });
   }
@@ -172,7 +174,11 @@
     var cells = grid.cells
     for (var i = 0;i < cells.length;i++) {
       if (!cells[i]) {
-        cells[i] = {spec: '', icon: 'coui://ui/main/shared/img/planets/empty.png'}
+        cells[i] = {
+          spec: '',
+          icon: 'coui://ui/main/shared/img/planets/empty.png',
+          tooltip: '',
+        }
       }
     }
   }

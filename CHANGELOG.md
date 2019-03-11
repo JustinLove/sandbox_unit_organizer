@@ -1,3 +1,8 @@
+## 1.7.1
+
+- Comatability circa 113034
+- Remove sandbox visibiltiy code, included in base game
+
 ## 1.7.0
 
 - model.sandboxGrid() returns {columns: n, cells: []} in order to introspect on the current layout
