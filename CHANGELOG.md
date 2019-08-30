@@ -1,3 +1,7 @@
+## 1.7.2
+
+- Account for unit row/column information and wider columns circa 113565
+
 ## 1.7.1
 
 - Comatability circa 113034

@@ -76,7 +76,14 @@
     var map = (new Build.HotkeyModel()).SpecIdToGridMap()
     var positions = Object.keys(map).map(function(spec) {return map[spec][1]})
     var max = Math.max.apply(Math, positions)
-    if (max < 15) {
+    var columns = Object.keys(map).map(function(spec) {return (map[spec][2] && map[spec][2].column) || 0})
+    var maxColumn = Math.max.apply(Math, columns)
+    var rows = Object.keys(map).map(function(spec) {return (map[spec][2] && map[spec][2].row) || 0})
+    var maxRow = Math.max.apply(Math, rows)
+    if (maxRow > 0 || maxColumn > 0) {
+      groupColumns(maxColumn+1)
+      groupRows(maxRow+1)
+    } else if (max < 15) {
       groupColumns(5)
       groupRows(3)
     } else if (max < 18) {
@@ -117,7 +124,11 @@
     units.forEach(function(item) {
       var target = map[item.spec]
       if (target && groups[target[0]]) {
-        grid[groups[target[0]] * groupSize() + target[1]] = item
+        var index = target[1]
+        if (target[2]) {
+          index = target[2].row * groupColumns() + target[2].column
+        }
+        grid[groups[target[0]] * groupSize() + index] = item
       }
     })
 
